@@ -14,59 +14,9 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0" />
   <link rel="author" href="http://effulgence.io" />
 
-  <!-- Place favicon.ico and apple-touch-icon.png in the root directory -->
-
   <link rel="stylesheet" href="css/normalize.css">
   <link rel="stylesheet" href="css/main.css">
   <script src="js/vendor/modernizr-2.7.1.min.js"></script>
-
-  <style type="text/css">
-    .back-link a {
-      color: #4ca340;
-      text-decoration: none;
-      border-bottom: 1px #4ca340 solid;
-    }
-
-    .back-link a:focus,
-    .back-link a:hover {
-      color: #408536;
-      text-decoration: none;
-      border-bottom: 1px #408536 solid;
-    }
-
-    h1 {
-      height: 100%;
-      /* The html and body elements cannot have any padding or margin. */
-      margin: 0;
-      font-size: 14px;
-      font-family: 'Open Sans', sans-serif;
-      color: #1c1d1e;
-      font-size: 32px;
-      margin-bottom: 3px;
-    }
-
-    h2 {
-      color: #1c1d1e;
-      font-family: 'Open Sans', sans-serif;
-      font-weight: normal;
-    }
-
-    .entry-header .inner {
-      text-align: left;
-      margin: 0 auto 20px;
-      width: 800px;
-    }
-
-    .entry-header {
-      padding-top: 20px;
-      background-color: #fff;
-      width: 100%;
-      position: fixed;
-      top: 0;
-      left: 0;
-      z-index: 999999;
-    }
-  </style>
 </head>
 
 <body class="loading">
@@ -161,6 +111,8 @@
     var scale = 1;
     var size = [window.innerWidth, window.innerHeight];
     var ratio = size[0] / size[1];
+    var ratio = 1.893491124260355;
+    // alert(ratio);
 
     var stage = new PIXI.Container();
     var renderer = PIXI.autoDetectRenderer(size[0], size[1], {
@@ -174,24 +126,21 @@
     prependChild(document.body, renderer.view);
     renderer.render(stage);
 
-    // renderer.view.style.border = "1px dashed black";
-    renderer.backgroundColor = 0xFFFFFF;
-    // renderer.view.style.position = "absolute";
     renderer.view.style.display = "block";
+    // renderer.view.style.position = "absolute";
     renderer.autoResize = true;
-    // renderer.resize(window.innerWidth, window.innerHeight);
+    renderer.resize(1280, 676);
 
-    resize();
     function resize() {
       var w, h;
       if (window.innerWidth / window.innerHeight >= ratio) {
         w = window.innerHeight * ratio;
         h = window.innerHeight;
-        console.log(w, h, ratio);
+        console.log("Greater than ratio - ", w, h, ratio);
       } else {
         w = window.innerWidth;
         h = window.innerWidth / ratio;
-        console.log(w, h, ratio);
+        console.log("Less than ratio - ", w, h, ratio);
       }
       renderer.view.style.width = w + 'px';
       renderer.view.style.height = h + 'px';
@@ -210,6 +159,7 @@
     PIXI.loader.add(["img/_bg.jpg", "img/_mg.png", "img/_fg.png"]).load(setup);
 
     function setup() {
+      resize();
       cielo = new PIXI.Sprite(PIXI.loader.resources["img/_bg.jpg"].texture);
       cielo.scale.set(1.15, 1.15);
 
@@ -223,7 +173,6 @@
       stage.addChild(montanas);
       stage.addChild(persona);
 
-      // Render final stage
       renderer.render(stage);
       draw();
     }
@@ -235,7 +184,6 @@
       requestAnimationFrame(draw);
       updateMousePosition();
       parallax();
-
       renderer.render(stage);
     }
 
@@ -263,82 +211,6 @@
     function updateMousePosition() {
       mouse.x = interaction.mouse.global.x;
       mouse.y = interaction.mouse.global.y;
-    }
-
-    function scaleToWindow(canvas, backgroundColor) {
-
-      backgroundColor = backgroundColor || "#2C3539";
-      var scaleX,
-        scaleY,
-        scale,
-        center;
-
-      //1. Scale the canvas to the correct size Figure out the scale amount on each axis
-      scaleX = window.innerWidth / canvas.offsetWidth;
-      scaleY = window.innerHeight / canvas.offsetHeight;
-
-      //Scale the canvas based on whichever value is less: `scaleX` or `scaleY`
-      scale = Math.min(scaleX, scaleY);
-      canvas.style.transformOrigin = "0 0";
-      canvas.style.transform = "scale(" + scale + ")";
-      console.log(scaleX)
-
-      //2. Center the canvas. Decide whether to center the canvas vertically or horizontally. Wide canvases should be centered vertically, and square or tall canvases should be centered horizontally
-      if (canvas.offsetwidth > canvas.offsetHeight) {
-        if (canvas.offsetWidth * scale < window.innerWidth) {
-          center = "horizontally";
-        } else {
-          center = "vertically";
-        }
-      } else {
-        if (canvas.offsetHeight * scale < window.innerHeight) {
-          center = "vertically";
-        } else {
-          center = "horizontally";
-        }
-      }
-
-      //Center horizontally (for square or tall canvases)
-      var margin;
-      if (center === "horizontally") {
-        margin = (window.innerWidth - canvas.offsetWidth * scale) / 2;
-        canvas.style.marginTop = 0;
-        canvas.style.marginBottom = 0;
-        canvas.style.marginLeft = margin + "px";
-        canvas.style.marginRight = margin + "px";
-      }
-
-      //Center vertically (for wide canvases)
-      if (center === "vertically") {
-        margin = (window.innerHeight - canvas.offsetHeight * scale) / 2;
-        canvas.style.marginTop = margin + "px";
-        canvas.style.marginBottom = margin + "px";
-        canvas.style.marginLeft = 0;
-        canvas.style.marginRight = 0;
-      }
-
-      //3. Remove any padding from the canvas  and body and set the canvas display style to "block"
-      canvas.style.paddingLeft = 0;
-      canvas.style.paddingRight = 0;
-      canvas.style.paddingTop = 0;
-      canvas.style.paddingBottom = 0;
-      canvas.style.display = "block";
-
-      //4. Set the color of the HTML body background
-      document.body.style.backgroundColor = backgroundColor;
-
-      //Fix some quirkiness in scaling for Safari
-      var ua = navigator.userAgent.toLowerCase();
-      if (ua.indexOf("safari") != -1) {
-        if (ua.indexOf("chrome") > -1) {
-          // Chrome
-        } else {
-          // Safari canvas.style.maxHeight = "100%"; canvas.style.minHeight = "100%";
-        }
-      }
-
-      //5. Return the `scale` value. This is important, because you'll nee this value for correct hit testing between the pointer and sprites
-      return scale;
     }
 
     function prependChild(parent, newFirstChild) {
