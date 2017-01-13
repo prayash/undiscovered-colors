@@ -9,6 +9,7 @@ html, button, input, select, textarea {
 body {
   font-size: 1em;
   line-height: 1.4;
+  font-family: 'Open Sans', 'Helvetica', 'Arial', sans-serif;
 }
 
 
@@ -187,11 +188,12 @@ main {
   bottom: 30%;
   left: 0;
   width: 100%;
-  text-align: center;
+  text-align: left;
+  color: white;
 }
 
 #slide-4 .bcg {
-  background-image: url('../img/slide-2.jpg')
+  background-image: url('../img/slide-9.jpg')
 }
 
 /* Slide 5 */
@@ -200,11 +202,11 @@ main {
 }
 
 #slide-5 .bcg {
-  background-image: url('../img/bcg_slide-5.jpg')
+  background-image: url('../img/slide-5.jpg')
 }
 
 #slide-5 .bcg2 {
-  background-image: url('../img/bcg_slide-5b.jpg');
+  background-image: url('../img/slide-5b.jpg');
   position: fixed;
   bottom: 0;
   left: 0;
@@ -239,7 +241,6 @@ main {
   vertical-align: middle;
   color: #ebebeb;
   padding: 0 8%;
-  text-align: center
 }
 
 .hsContent h2, .copy h2 {
@@ -447,4 +448,8 @@ h2 {
   margin: 0 auto;
   padding: 2em 1em;
   background: rgba(0, 0, 0, 0.25);
+}
+
+.quote {
+  font-size: 1.25em;
 }

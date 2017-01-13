@@ -7,7 +7,7 @@
   $slideTall2 = $('.homeSlideTall2');
   $body = $('body');
 
-  //FadeIn all sections
+  // FadeIn all sections
   $body.imagesLoaded(function() {
     setTimeout(function() {
 
